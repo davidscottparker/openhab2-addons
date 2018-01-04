@@ -8,8 +8,6 @@
  */
 package org.openhab.binding.draytonwiser.handler;
 
-import static org.openhab.binding.draytonwiser.DraytonWiserBindingConstants.*;
-
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
@@ -20,30 +18,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The {@link DraytonWiserHandler} is responsible for handling commands, which are
+ * The {@link RoomStatHandler} is responsible for handling commands, which are
  * sent to one of the channels.
  *
  * @author Andrew Schofield - Initial contribution
  */
- @NonNullByDefault
-public class DraytonWiserHandler extends BaseThingHandler {
+@NonNullByDefault
+public class RoomStatHandler extends BaseThingHandler {
 
-    private final Logger logger = LoggerFactory.getLogger(DraytonWiserHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(RoomStatHandler.class);
 
-    public DraytonWiserHandler(Thing thing) {
+    public RoomStatHandler(Thing thing) {
         super(thing);
     }
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
-        if (channelUID.getId().equals(CHANNEL_1)) {
-            // TODO: handle command
+        // if (channelUID.getId().equals(CHANNEL_1)) {
+        // TODO: handle command
 
-            // Note: if communication with thing fails for some reason,
-            // indicate that by setting the status with detail information
-            // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
-            // "Could not control device at IP address x.x.x.x");
-        }
+        // Note: if communication with thing fails for some reason,
+        // indicate that by setting the status with detail information
+        // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
+        // "Could not control device at IP address x.x.x.x");
+        // }
     }
 
     @Override
