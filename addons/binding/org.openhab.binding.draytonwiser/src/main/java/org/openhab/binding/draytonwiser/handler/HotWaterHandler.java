@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
@@ -60,6 +61,16 @@ public class HotWaterHandler extends DraytonWiserThingHandler {
             boolean manualMode = command.toString().toUpperCase().equals("ON");
             setManualMode(manualMode);
         }
+
+        if (channelUID.getId().equals(DraytonWiserBindingConstants.CHANNEL_HOT_WATER_SETPOINT)) {
+            boolean setPoint = command.toString().toUpperCase().equals("ON");
+            setSetPoint(setPoint);
+        }
+
+        if (channelUID.getId().equals(DraytonWiserBindingConstants.CHANNEL_HOT_WATER_BOOST_DURATION)) {
+            int boostDuration = Math.round((Float.parseFloat(command.toString()) * 60));
+            setBoostDuration(boostDuration);
+        }
     }
 
     @Override
@@ -76,6 +87,15 @@ public class HotWaterHandler extends DraytonWiserThingHandler {
                         getHotWaterDemandState());
                 updateState(new ChannelUID(getThing().getUID(), DraytonWiserBindingConstants.CHANNEL_MANUAL_MODE_STATE),
                         getManualModeState());
+                updateState(
+                        new ChannelUID(getThing().getUID(), DraytonWiserBindingConstants.CHANNEL_HOT_WATER_SETPOINT),
+                        getSetPointState());
+                updateState(new ChannelUID(getThing().getUID(), DraytonWiserBindingConstants.CHANNEL_HOT_WATER_BOOSTED),
+                        getBoostedState());
+                updateState(
+                        new ChannelUID(getThing().getUID(),
+                                DraytonWiserBindingConstants.CHANNEL_HOT_WATER_BOOST_REMAINING),
+                        getBoostRemainingState());
             }
 
         } catch (Exception e) {
@@ -127,9 +147,62 @@ public class HotWaterHandler extends DraytonWiserThingHandler {
         return OnOffType.OFF;
     }
 
+    private State getSetPointState() {
+        if (hotWaterChannels != null && hotWaterChannels.size() >= 1) {
+            if (hotWaterChannels.get(0).getWaterHeatingState().toUpperCase().equals("ON")) {
+                return OnOffType.ON;
+            }
+        }
+
+        return OnOffType.OFF;
+    }
+
     private void setManualMode(Boolean manualMode) {
         if (bridgeHandler != null) {
             bridgeHandler.setHotWaterManualMode(manualMode);
         }
+    }
+
+    private void setSetPoint(Boolean setPointMode) {
+        if (bridgeHandler != null) {
+            bridgeHandler.setHotWaterSetPoint(setPointMode ? 1100 : -200);
+        }
+    }
+
+    private void setBoostDuration(Integer durationMinutes) {
+        if (bridgeHandler != null) {
+            if (durationMinutes > 0) {
+                bridgeHandler.setHotWaterBoostActive(durationMinutes);
+            } else {
+                bridgeHandler.setHotWaterBoostInactive();
+            }
+        }
+    }
+
+    private State getBoostedState() {
+        if (hotWaterChannels != null && hotWaterChannels.size() >= 1) {
+            if (hotWaterChannels.get(0).getOverrideTimeoutUnixTime() != null
+                    && !hotWaterChannels.get(0).getOverrideType().toUpperCase().equals("NONE")) {
+                return OnOffType.ON;
+            }
+        }
+
+        updateState(new ChannelUID(getThing().getUID(), DraytonWiserBindingConstants.CHANNEL_HOT_WATER_BOOST_DURATION),
+                new DecimalType(0));
+
+        return OnOffType.OFF;
+    }
+
+    private State getBoostRemainingState() {
+        if (hotWaterChannels != null && hotWaterChannels.size() >= 1) {
+            if (hotWaterChannels.get(0).getOverrideTimeoutUnixTime() != null
+                    && !hotWaterChannels.get(0).getOverrideType().toUpperCase().equals("NONE")) {
+                return new DecimalType(
+                        ((hotWaterChannels.get(0).getOverrideTimeoutUnixTime() - System.currentTimeMillis() / 1000L))
+                                / 60);
+            }
+        }
+
+        return new DecimalType(0);
     }
 }

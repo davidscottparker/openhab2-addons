@@ -32,6 +32,8 @@ public class DraytonWiserBindingConstants {
 
     public static final String REFRESH_INTERVAL = "REFRESH";
 
+    public static final String AWAY_MODE_SETPOINT = "AWAYSETPOINT";
+
     public static final Integer OFFLINE_TEMPERATURE = -32768;
 
     // Web Service Endpoints
@@ -75,10 +77,16 @@ public class DraytonWiserBindingConstants {
     public static final String CHANNEL_HEATCHANNEL_2_DEMAND_STATE = "heatChannel2DemandState";
     public static final String CHANNEL_HOTWATER_DEMAND_STATE = "hotWaterDemandState";
     public static final String CHANNEL_AWAY_MODE_STATE = "awayModeState";
-    public static final String CHANNEL_AWAY_MODE_SETPOINT = "awayModeSetPoint";
     public static final String CHANNEL_ECO_MODE_STATE = "ecoModeState";
     public static final String CHANNEL_MANUAL_MODE_STATE = "manualModeState";
     public static final String CHANNEL_ZIGBEE_CONNECTED = "zigbeeConnected";
+    public static final String CHANNEL_HOT_WATER_SETPOINT = "hotWaterSetPoint";
+    public static final String CHANNEL_HOT_WATER_BOOST_DURATION = "hotWaterBoostDuration";
+    public static final String CHANNEL_HOT_WATER_BOOSTED = "hotWaterBoosted";
+    public static final String CHANNEL_HOT_WATER_BOOST_REMAINING = "hotWaterBoostRemaining";
+    public static final String CHANNEL_ROOM_BOOST_DURATION = "roomBoostDuration";
+    public static final String CHANNEL_ROOM_BOOSTED = "roomBoosted";
+    public static final String CHANNEL_ROOM_BOOST_REMAINING = "roomBoostRemaining";
 
     public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Sets.newHashSet(THING_TYPE_CONTROLLER,
             THING_TYPE_ROOM, THING_TYPE_ROOMSTAT, THING_TYPE_BRIDGE, THING_TYPE_ITRV, THING_TYPE_HOTWATER);
